@@ -22,8 +22,8 @@
 #include<QtNetwork/QNetworkRequest>
 #include<QtNetwork/QNetworkReply>
 
-#pragma comment(lib, "Qt5Network.lib")
-
+#pragma comment(lib, "Qt5Networkd.lib")
+#include<QMyCustLabel.h>
 namespace Ui {
 class MainWindow;
 }
@@ -75,8 +75,8 @@ private:
     QListWidget*  listWidget;
 
     //test
-    QLabel* labelHead;
-    QNetworkAccessManager manager;
+    QMyCustLabel* labelHead;
+    QNetworkAccessManager* manager;
 
 };
 

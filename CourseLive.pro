@@ -24,9 +24,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += main.cpp\
-        MainWindow.cpp
+        MainWindow.cpp \
+    QMyCustLabel.cpp
 
-HEADERS  += MainWindow.h
+HEADERS  += MainWindow.h \
+    QMyCustLabel.h
 
 FORMS    += MainWindow.ui
 

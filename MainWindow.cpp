@@ -39,10 +39,13 @@ void MainWindow::initRequestUI()
     QVBoxLayout * vBoxLayout = new QVBoxLayout();
     //图标
     QHBoxLayout * hBoxLayout= new QHBoxLayout();
-    labelHead = new QLabel();
+    labelHead = new QMyCustLabel();
     labelHead->setFixedSize(121,105);
+
     labelHead->setPixmap(QPixmap(":/image/images/emptystate.png"));
+
     hBoxLayout->addStretch();
+
     hBoxLayout->addWidget(labelHead);
     hBoxLayout->addStretch();
     // label->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
@@ -91,7 +94,7 @@ void MainWindow::initReponseUI()
 {
     // 继承QMainWindow 创建的窗口它本身具有一个布局层，要想布局适应窗口，随着窗口的大小一起改变 这里不许自己 增加一个布局 并用setCentralWidget 添加到中心布局中
      reponseWidget   = new QWidget();
-     reponseWidget->setStyleSheet(" background-color:#FFF0F0F0;");
+    // reponseWidget->setStyleSheet(" background-color:#FFF0F0F0;");
      this->setCentralWidget(reponseWidget);
 
      //list部件
@@ -216,9 +219,9 @@ QImage* MainWindow::GetScaledImage(QString imagePath,int scaledWidth /*=  300*/,
 void MainWindow::SetCourseItem(QListWidget*  listWidget,ST_COURSE_ITEM courseItem)
  {
     QWidget*  widget = new QWidget;
-
+  widget->setToolTip(courseItem.thumbUrl);
     //widget->setStyleSheet("background-color:red;");
-    QHBoxLayout*   layout = new QHBoxLayout(widget);
+    QHBoxLayout*   layout = new QHBoxLayout();
 
 
     QLabel* label0 = new QLabel();
@@ -270,9 +273,11 @@ void MainWindow::SetCourseItem(QListWidget*  listWidget,ST_COURSE_ITEM courseIte
     widget->setLayout(layout);
 
     QListWidgetItem *widgetItem = new QListWidgetItem(listWidget);
+    widgetItem->setText(courseItem.thumbUrl);
     listWidget->addItem(widgetItem);
     listWidget->setItemWidget(widgetItem,widget);
     widgetItem->setSizeHint(QSize(0,150));
+
 
  }
 
@@ -308,25 +313,35 @@ void MainWindow::OnGetCourseListResult(const QVector<ST_COURSE_ITEM> &vecCourseI
 }
 
 
-
  void MainWindow::onDoubleClicked(QListWidgetItem* item)
  {
-    QMessageBox::information(this,tr("MainWindow"), tr("OnDoubleClicked!"));
- }
 
+   qDebug() << item->text();
+
+   QListWidget* pList = item->listWidget();
+   QWidget*     widget2 =  pList->itemWidget(item);
+
+   qDebug()<<   widget2->toolTip();
+
+   QLayout *layout = widget2->layout();
+   qDebug()<< layout->count();
+ }
 
 
  void MainWindow::onSureClicked()
  {
      initRequestUI();
 
-     QNetworkRequest request;
      //request.setUrl(QUrl("https://mia-upload.oss-cn-shanghai.aliyuncs.com/course-default/roombg_6_20.png"));
-     request.setUrl(QUrl("http://avatar.csdn.net/6/9/A/1_u011012932.jpg"));
-     connect(&manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(slotReplyPixmapLoad(QNetworkReply *)));
-     manager.get(request);
+//     request.setUrl(QUrl("http://avatar.csdn.net/6/9/A/1_u011012932.jpg"));
+//     connect(&manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(slotReplyPixmapLoad(QNetworkReply *)));
+//     manager.get(request);
 
-
+      manager = new QNetworkAccessManager(this);
+      connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(slotReplyPixmapLoad(QNetworkReply*)));
+      QNetworkRequest request;
+      request.setUrl(QUrl("http://avatar.csdn.net/6/9/A/1_u011012932.jpg"));
+      manager->get(request);
 
 
       //QMessageBox::information(this,tr("MainWindow"), tr("onSuureClicked!"));

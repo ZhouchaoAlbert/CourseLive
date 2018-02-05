@@ -39,7 +39,7 @@ void MainWindow::initRequestUI()
     QVBoxLayout * vBoxLayout = new QVBoxLayout();
     //图标
     QHBoxLayout * hBoxLayout= new QHBoxLayout();
-    labelHead = new QMyCustLabel();
+    QLabel* labelHead = new QLabel();
     labelHead->setFixedSize(121,105);
 
     labelHead->setPixmap(QPixmap(":/image/images/emptystate.png"));
@@ -189,6 +189,15 @@ void MainWindow::initReponseUI()
 
         SetCourseItem(listWidget,stItem);
     }
+
+    //更新头像
+    QMap<QMyCustLabel*, QString>::const_iterator it;
+    for( it=maplistHeadImage.constBegin(); it!=maplistHeadImage.constEnd(); ++it)
+    {
+        it.key()->updataHeadImage(it.value());
+        qDebug() << it.key() <<"        " << it.value();
+    }
+
 }
 
 
@@ -219,7 +228,7 @@ QImage* MainWindow::GetScaledImage(QString imagePath,int scaledWidth /*=  300*/,
 void MainWindow::SetCourseItem(QListWidget*  listWidget,ST_COURSE_ITEM courseItem)
  {
     QWidget*  widget = new QWidget;
-  widget->setToolTip(courseItem.thumbUrl);
+    widget->setToolTip(courseItem.thumbUrl);
     //widget->setStyleSheet("background-color:red;");
     QHBoxLayout*   layout = new QHBoxLayout();
 
@@ -230,10 +239,10 @@ void MainWindow::SetCourseItem(QListWidget*  listWidget,ST_COURSE_ITEM courseIte
 
     label0->setScaledContents(true);
     QImage* scaledImg = GetScaledImage(courseItem.thumbUrl,300,150);
-
     label0->setPixmap(QPixmap::fromImage(*scaledImg));
     //label0->setStyleSheet("border:1px solid gray; color:red;");
-
+    //保存要更新的头像对象控件及url
+    maplistHeadImage.insert(label0,"http://avatar.csdn.net/6/9/A/1_u011012932.jpg"); //Test
 
     //标签
     QLabel* label = new QLabel();
@@ -330,20 +339,7 @@ void MainWindow::OnGetCourseListResult(const QVector<ST_COURSE_ITEM> &vecCourseI
  void MainWindow::onSureClicked()
  {
      initRequestUI();
-
-     //request.setUrl(QUrl("https://mia-upload.oss-cn-shanghai.aliyuncs.com/course-default/roombg_6_20.png"));
-//     request.setUrl(QUrl("http://avatar.csdn.net/6/9/A/1_u011012932.jpg"));
-//     connect(&manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(slotReplyPixmapLoad(QNetworkReply *)));
-//     manager.get(request);
-
-      manager = new QNetworkAccessManager(this);
-      connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(slotReplyPixmapLoad(QNetworkReply*)));
-      QNetworkRequest request;
-      request.setUrl(QUrl("http://avatar.csdn.net/6/9/A/1_u011012932.jpg"));
-      manager->get(request);
-
-
-      //QMessageBox::information(this,tr("MainWindow"), tr("onSuureClicked!"));
+     //QMessageBox::information(this,tr("MainWindow"), tr("onSuureClicked!"));
  }
 
 
@@ -354,21 +350,6 @@ void MainWindow::OnGetCourseListResult(const QVector<ST_COURSE_ITEM> &vecCourseI
  }
 
 
-
-
-
-
-     // 这里的url一定要带上http://头的， 跟在浏览器里输入其它链接不太一样，浏览器里面会自动转的，这里需要手动加上。
-
- void MainWindow::slotReplyPixmapLoad(QNetworkReply* reply)
- {
-    QByteArray bytes = reply->readAll();
-    QPixmap pixmap;
-    pixmap.loadFromData(bytes);
-    qDebug() << "1111111111111111111111111111111111";
-
-    labelHead->setPixmap(pixmap);
- }
 
 /*
 

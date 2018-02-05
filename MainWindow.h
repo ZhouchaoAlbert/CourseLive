@@ -21,6 +21,7 @@
 #include<QtNetwork/QNetworkAccessManager>
 #include<QtNetwork/QNetworkRequest>
 #include<QtNetwork/QNetworkReply>
+#include<QMap>
 
 #pragma comment(lib, "Qt5Networkd.lib")
 #include"QMyCustLable.h"
@@ -68,16 +69,14 @@ private slots:
     void onDoubleClicked(QListWidgetItem* item);
     void onSureClicked();
     void onCancelClicked();
-    void slotReplyPixmapLoad(QNetworkReply* reply);
 private:
     //Ui::MainWindow *ui;
     QWidget*       requestWidget;  //开始请求数据是的布局组件
      QWidget*      reponseWidget;  //有数据返回时数据是的布局组件  同时要把请求的布局隐藏
-    QListWidget*  listWidget;
+    QListWidget*   listWidget;
 
     //test
-    QMyCustLabel* labelHead;
-    QNetworkAccessManager* manager;
+    QMap<QMyCustLabel* , QString> maplistHeadImage;
 
 };
 

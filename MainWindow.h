@@ -23,7 +23,8 @@
 #include<QtNetwork/QNetworkReply>
 
 #pragma comment(lib, "Qt5Networkd.lib")
-#include<QMyCustLabel.h>
+#include"QMyCustLable.h"
+
 namespace Ui {
 class MainWindow;
 }

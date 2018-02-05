@@ -224,11 +224,10 @@ void MainWindow::SetCourseItem(QListWidget*  listWidget,ST_COURSE_ITEM courseIte
     QHBoxLayout*   layout = new QHBoxLayout();
 
 
-    QLabel* label0 = new QLabel();
-   // label0->setGeometry(0,0,100,200);
-    label0->setFixedWidth(300);
-    label0->setIndent(1);
-    label0->setMargin(1);
+    QMyCustLabel* label0 = new QMyCustLabel();
+
+    label0->setFixedSize(300,150);
+
     label0->setScaledContents(true);
     QImage* scaledImg = GetScaledImage(courseItem.thumbUrl,300,150);
 
